@@ -8,8 +8,12 @@
 # Derived from Manuele J Sarfattis work (https://github.com/mjsarfatti)
 #
 # Still under MIT license.
+#
 # Source can be found here:
-# https://github.com/mjsarfatti
+#
+# https://github.com/leifcr/nestedSortableTree
+#
+# Current version : v0.1.1
 ###
 
 # Reference jQuery
