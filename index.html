@@ -1,0 +1,91 @@
+<html>
+<head>
+  <title>Nested Sortable CoffeeScript version with Rational number sorting</title>
+  <link rel="stylesheet" type="text/css" href="demo.css">
+</head>
+<body>
+  <h1>Nested Sortable</h1>
+  <h2>CoffeeScript version with Rational number sorting</h2>
+  <h3>Example</h3>
+  <ol class="sortable ui-sortable">
+      <li id="node_1" data-nv="1" data-dv="1" data-snv="2" data-sdv="1"><div>Node 1</div>
+        <ol>
+          <li id="node_2" data-nv="3" data-dv="2" data-snv="5" data-sdv="3"><div>Node 1.1</div></li>
+          <li id="node_3" data-nv="5" data-dv="3" data-snv="7" data-sdv="4"><div>Node 1.2</div></li>
+        </ol>
+      </li>
+      <li id="node_4" data-nv="2" data-dv="1" data-snv="3" data-sdv="1"> <div>Node 2</div></li>
+      <li id="node_5" data-nv="3" data-dv="1" data-snv="4" data-sdv="1"><div>Node 3</div>
+        <ol>
+          <li id="node_6" data-nv="7" data-dv="2" data-snv="11" data-sdv="3"><div>Node 3.1</div></li>
+          <li id="node_7" data-nv="11" data-dv="3" data-snv="15" data-sdv="4"><div>Node 3.2</div>
+            <ol>
+              <li id="node_8" data-nv="26" data-dv="7" data-snv="41" data-sdv="11"><div>Node 3.2.1</div></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li id="node_9" data-nv="4" data-dv="1" data-snv="5" data-sdv="1"><div>Node 4</div></li>
+      <li id="node_10" data-nv="5" data-dv="1" data-snv="6" data-sdv="1"><div>Node 5</div></li>
+  </ol>
+<p>
+  <!-- <input type="submit" name="serialize" id="serialize" value="Serialize"> -->
+  <input type="submit" name="toArray" id="toArray" value="To array">
+</p>
+<pre id="serializeOutput"></pre>
+<pre id="arrayOutput"></pre>
+<div id="logger"></div>
+</body>
+<script src="jquery-1.8.0.js"></script>
+<script src="jquery-ui.1.8.23.js"></script>
+<script src="json2.js"></script>
+<script src="log4javascript.js"></script>
+<script src="./jquery.ui.nestedSortableTree.js"></script>
+<!-- <script src="./test.js"></script> -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('ol.sortable').nestedSortableTree({
+      debug: true,
+      // disableNesting: 'no-nest',
+      forcePlaceholderSize: true,
+      handle: 'div',
+      helper: 'clone',
+      items: 'li',
+      // maxLevels: 3,
+      opacity: .75,
+      placeholder: 'placeholder',
+      revert: 150,
+      tabSize: 25,
+      tolerance: 'pointer',
+      toleranceElement: '> div'
+    });
+
+    $('#serialize').click(function(){
+      serialized = $('ol.sortable').nestedSortableTree('serialize');
+      $('#serializeOutput').text(serialized+'\n\n');
+    })
+
+    // $('#toHierarchy').click(function(e){
+    //   hiered = $('ol.sortable').nestedSortable('toHierarchy', {startDepthCount: 0});
+    //   hiered = dump(hiered);
+    //   (typeof($('#toHierarchyOutput')[0].textContent) != 'undefined') ?
+    //   $('#toHierarchyOutput')[0].textContent = hiered : $('#toHierarchyOutput')[0].innerText = hiered;
+    // })
+
+    $('#toArray').click(function(e){
+      toArrayData = JSON.stringify($('ol.sortable').nestedSortableTree('toArray', {startDepthCount: 0}), null, 2);
+      $('#arrayOutput').text(toArrayData)
+    })
+
+    // $('#toArray').click(function(e){
+    //   arraied = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
+    //   arraied = dump(arraied);
+    //   (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ?
+    //   $('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
+    // })
+
+  });
+</script>
+</html>
+
+
