@@ -11,19 +11,22 @@
 - It is possible to define elements that will not accept a new nested item/list and a maximum depth for nested items
 - The root level can be protected
 
+## Difference between this and original version
+- Support rational numbers for sorting
+- Serialized data is out - only support array, as you do need a lot of data... use json to serialize the array if needed.
 ## Usage
 
 ```
 <ol class="sortable">
-	<li><div>Some content</div></li>
+	<li><div>I'm a bear</div></li>
 	<li>
-		<div>Some content</div>
+		<div>I'm the second bear</div>
 		<ol>
-			<li><div>Some sub-item content</div></li>
-			<li><div>Some sub-item content</div></li>
+			<li><div>I'm a child bear</div></li>
+			<li><div>I'm the brother child bear</div></li>
 		</ol>
 	</li>
-	<li><div>Some content</div></li>
+	<li><div>And I'm the third bear</div></li>
 </ol>
 ```
 
@@ -69,9 +72,6 @@ Also, the default list type is `<ol>`.
 ## Custom Methods
 
 <dl>
-	<dt>serialize</dt>
-	<dd>Serializes the nested list into a string like <b>setName[item1Id]=parentId&setName[item2Id]=parentId</b>, reading from each item's id formatted as 'setName_itemId' (where itemId is a number).
-	It accepts the same options as the original Sortable method (<b>key</b>, <b>attribute</b> and <b>expression</b>).</dd>
 	<dt>toArray</dt>
 	<dd>Builds an array where each element is in the form:
 <pre>setName[n] =>
@@ -84,21 +84,6 @@ Also, the default list type is `<ol>`.
 }
 </pre>
 	It accepts the same options as the original Sortable method (<b>attribute</b> and <b>expression</b>) plus the custom <b>startDepthCount</b>, that sets the starting depth number (default is <b>0</b>).</dd>
-	<dt>toHierarchy</dt>
-	<dd>Builds a hierarchical object in the form:
-<pre>'0' ...
-	'id' => itemId
-'1' ...
-	'id' => itemId
-	'children' ...
-		'0' ...
-			'id' => itemId
-		'1' ...
-			'id' => itemId
-'2' ...
-	'id' => itemId
-</pre>
-	Similarly to <code>toArray</code>, it accepts <b>attribute</b> and <b>expression</b> options.</dd>
 </dl>
 
 ## Known Bugs
@@ -118,5 +103,4 @@ Tested with: IE 6/7/8, Firefox 3.6/4, Chrome, Safari 3
 
 This work is licensed under the MIT License.
 
-This work is *pizzaware*. If it saved your life, or you just feel good at heart, please consider offering me a pizza. This can be done in two ways: (1) follow [this link](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=RSJEW3N9PRMYY&lc=IT&item_name=Manuele%20Sarfatti&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted) to donate through paypal; (2) send me cash via traditional mail to my home address in Italy. Is the second method legal? It is in Italy if you use Posta assicurata. You should check with your local laws if you live elsewhere.
-	
+This work is *pizzaware*. Please consider offering the original author a pizza or donate to him. If you visit Copenhagen, a beer without a bear is always good.
