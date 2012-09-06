@@ -6,6 +6,10 @@
 <body>
   <h1>Nested Sortable</h1>
   <h2>CoffeeScript version with Rational number sorting</h2>
+  <p>Drag the nodes around to test moving<br>
+  Use the buttons below to test output. 
+  <br>Feedback to <a href="http://twitter.com/leifcr">@leifcr</a>
+  <br>Source: <a href="http://github.com/leifcr/nestedSortableTree">Github</a></p>
   <h3>Example</h3>
   <ol class="sortable ui-sortable">
       <li id="node_1" data-nv="1" data-dv="1" data-snv="2" data-sdv="1"><div>Node 1</div>
@@ -29,15 +33,39 @@
       <li id="node_10" data-nv="5" data-dv="1" data-snv="6" data-sdv="1"><div>Node 5</div></li>
   </ol>
 <p>
-  <!-- <input type="submit" name="serialize" id="serialize" value="Serialize"> -->
-  <input type="submit" name="toArray" id="toArray" value="To array">
+  <input type="submit" name="serialize" id="serialize" value="Serialize Tree">
+  <input type="submit" name="toArray" id="toArray" value="Tree to Array">
+  <input type="submit" name="showHideLogger" id="showHideLogger" value="Hide Log">
 </p>
-<pre id="serializeOutput"></pre>
-<pre id="arrayOutput"></pre>
-<div id="logger"></div>
+<pre class="output" id="serializeOutput"></pre>
+<pre class="output" id="arrayOutput"></pre>
+  <p>How nestedSortableTree is initialized in this example: </p>
+  <pre class="initdata">
+  $(document).ready(function(){
+    $('ol.sortable').nestedSortableTree({
+      debug: true,
+      // disableNesting: 'no-nest',
+      forcePlaceholderSize: true,
+      handle: 'div',
+      helper: 'clone',
+      items: 'li',
+      // maxLevels: 3,
+      opacity: .75,
+      placeholder: 'placeholder',
+      revert: 150,
+      tabSize: 25,
+      tolerance: 'pointer',
+      toleranceElement: '> div'
+    });
+  </pre>
+
+<div id="outerlogger">
+  <h3>Log</h3>
+  <div id="logger"></div>
+</div>
 </body>
 <script src="jquery.1.8.0.min.js"></script>
-<script src="jquery-ui.1.8.23.min"></script>
+<script src="jquery-ui.1.8.23.min.js"></script>
 <script src="json2.js"></script>
 <script src="log4javascript.js"></script>
 <script src="jquery.ui.nestedSortableTree.js"></script>
@@ -61,9 +89,22 @@
     });
 
     $('#serialize').click(function(){
-      serialized = $('ol.sortable').nestedSortableTree('serialize');
-      $('#serializeOutput').text(serialized+'\n\n');
+      $('#serializeOutput').toggle();
+      if ($('#serializeOutput').is(':visible')) {
+        serialized = $('ol.sortable').nestedSortableTree('serialize');
+        $('#serializeOutput').text(nice_print_serialized_data(serialized));
+        $("#serialize").attr("value", "Hide serialized data");
+      }
+      else {
+        $("#serialize").attr("value", "Serialize Tree");
+      }
     })
+
+    function nice_print_serialized_data(serialized_data) {
+      var ret;
+      ret = " " + serialized_data.replace(/&/g, "\n&");
+      return ret;
+    }
 
     // $('#toHierarchy').click(function(e){
     //   hiered = $('ol.sortable').nestedSortable('toHierarchy', {startDepthCount: 0});
@@ -73,8 +114,25 @@
     // })
 
     $('#toArray').click(function(e){
-      toArrayData = JSON.stringify($('ol.sortable').nestedSortableTree('toArray', {startDepthCount: 0}), null, 2);
-      $('#arrayOutput').text(toArrayData)
+      $('#arrayOutput').toggle();
+      if ($('#arrayOutput').is(':visible')) {
+        toArrayData = JSON.stringify($('ol.sortable').nestedSortableTree('toArray', {startDepthCount: 0}), null, 2);
+        $('#arrayOutput').text(toArrayData)
+        $("#toArray").attr("value", "Hide Array");
+      }
+      else {
+        $("#toArray").attr("value", "Tree to Array");
+      }
+    })
+
+    $('#showHideLogger').click(function(e){
+      $('#outerlogger').toggle();
+      if ($('#outerlogger').is(':visible')) {
+        $("#showHideLogger").attr("value", "Hide log");
+      }
+      else {
+        $("#showHideLogger").attr("value", "Show log");
+      }
     })
 
     // $('#toArray').click(function(e){
