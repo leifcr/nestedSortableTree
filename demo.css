@@ -1,9 +1,82 @@
-#logger {
+body {
+  font-size: 13px;
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  color: #333;
+}
+h1,h2,h3,h4,h5,h6 {
+}
+#outerlogger {
+  display: none;
+  border-radius: 20px;
+  border:1px solid #BBB;
+  background-color: #BBB;
   position:absolute;
-  right:0;
+  right:5px;
   top:5%;
   width:600px;
+  height:600px;
   height:90%;
   float:right;
   opacity: 0.8;
+  padding:10px;
+}
+#outerlogger #logger{
+  height:570px;
+}
+
+#outerlogger h3 {
+  border:#999 solid 1px;
+  background-color: #fff;
+  width:100px;
+  padding:5px;
+  margin: 0px 0 10px 0;
+  border-radius:10px;
+  text-align: center;
+  height: 20px;
+}
+li {
+  list-style-type: none;  
+}
+ol.sortable {
+  line-height: 1.4;
+  background: url("./tree/vline.png") repeat-y;
+  margin-left: 10px;
+  padding: 0;
+}
+ol.sortable ol {
+    background: url("./tree/vline.png") repeat-y;
+    margin-left:20px;
+    padding: 0;
+}
+ol.sortable li {
+    clear:both;
+    min-height: 20px;
+    margin: 0;
+    padding: 0 0 0 14px;
+    background: url("./tree/node.png") no-repeat;
+}
+ol.sortable li:last-child {
+    background: #fff url("./tree/lastnode.png") no-repeat;
+} 
+.ui-sortable-helper {
+  background-color: #000;
+}
+
+pre.initdata {
+  padding:2px;
+  /*min-height: 10px;*/
+  border:1px solid #ddd;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+pre.output {
+  padding:10px;
+  /*min-height: 10px;*/
+  border:1px solid #555;
+  background-color: #eee;
+  border-radius: 10px;
+}
+#arrayOutput, #serializeOutput{
+  display: none;
 }

@@ -10,8 +10,12 @@
 # Derived from Manuele J Sarfattis work (https://github.com/mjsarfatti)
 #
 # Still under MIT license.
+#
 # Source can be found here:
-# https://github.com/mjsarfatti
+#
+# https://github.com/leifcr/nestedSortableTree
+#
+# Current version : v0.1.1
 */
 
 
@@ -44,11 +48,10 @@
       }
     },
     _create: function() {
-      var appender, kake;
+      var appender;
       this.element.data("sortable", this.element.data("nestedSortableTree"));
       if (this.options.nested_debug) {
         this.nestedLogger = log4javascript.getLogger();
-        kake = $("div#logger");
         appender = new log4javascript.InPageAppender("logger");
         appender.setWidth("100%");
         appender.setHeight("100%");
@@ -226,7 +229,7 @@
       _ref = node.children(this.options.listType);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         child = _ref[_i];
-        this._set_nv_dv_xl_child(child, new_keys);
+        this._set_nv_dv_xl_child($(child), new_keys);
       }
       return true;
     },
@@ -407,6 +410,27 @@
           return this.beyondMaxLevels = 1;
         }
       }
+    },
+    serialize: function(options) {
+      var items, o, str, _master_this;
+      o = $.extend({}, this.options, options);
+      items = this._getItemsAsjQuery(o && o.connected);
+      str = [];
+      _master_this = this;
+      $(items).each(function() {
+        var pid, res;
+        res = ($(o.item || this).attr(o.attribute || "id") || "").match(o.expression || /(.+)[-=_](.+)/);
+        pid = ($(o.item || this).parent(o.listType).parent(o.items).attr(o.attribute || "id") || "").match(o.expression || /(.+)[-=_](.+)/);
+        if (res) {
+          str.push(((o.key || res[1]) + "[" + (o.key && o.expression ? res[1] : res[2]) + "][parent]") + "=" + (pid ? (o.key && o.expression ? pid[1] : pid[2]) : o.rootID));
+        }
+        str.push(((o.key || res[1]) + "[" + (o.key && o.expression ? res[1] : res[2]) + "][nv]") + "=" + $(o.item || this).attr("data-nv"));
+        str.push(((o.key || res[1]) + "[" + (o.key && o.expression ? res[1] : res[2]) + "][dv]") + "=" + $(o.item || this).attr("data-dv"));
+        str.push(((o.key || res[1]) + "[" + (o.key && o.expression ? res[1] : res[2]) + "][snv]") + "=" + $(o.item || this).attr("data-snv"));
+        return str.push(((o.key || res[1]) + "[" + (o.key && o.expression ? res[1] : res[2]) + "][sdv]") + "=" + $(o.item || this).attr("data-sdv"));
+      });
+      if (!str.length && o.key) str.push(o.key + "=");
+      return str.join("&");
     },
     toArray: function(options) {
       var left, o, _master_this;
