@@ -51,7 +51,6 @@ $.widget "ui.nestedSortableTree", $.ui.sortable,
     
     if (@options.nested_debug)
       @nestedLogger = log4javascript.getLogger()
-      kake = $("div#logger")
       appender = new log4javascript.InPageAppender("logger")
       appender.setWidth("100%")
       appender.setHeight("100%")
@@ -64,14 +63,6 @@ $.widget "ui.nestedSortableTree", $.ui.sortable,
         throw new Error("nestedSortableTree: Wrong listtype... #{@element.get(0).tagname} is not #{options.listtype}");
 
     $.ui.sortable::_create.apply this, arguments
-    # bind doesn't seem to work... WTF?
-    # bind change event to update nv/dv
-    # $(@).bind "sortupdate", event, (event, ui) ->
-    #   #@update_nv_dv event
-    #   @log "here"
-    #   @log event
-    #   @log ui
-    #   true
   
   destroy: ->
     @log("nestedSortableTree destroy")
@@ -296,7 +287,7 @@ $.widget "ui.nestedSortableTree", $.ui.sortable,
     @log("#{@element_text_without_children($(node))}: Moving child item, idx: #{idx}", false)
     new_keys = @_create_keys_from_ancestor_keys(parent_keys, idx)
     @_set_nv_dv(node, new_keys, parent_keys, false)
-    @_set_nv_dv_xl_child child, new_keys for child in node.children(@options.listType)
+    @_set_nv_dv_xl_child $(child), new_keys for child in node.children(@options.listType)
     true
 
   _create_key_array: (nv, dv, snv, sdv) ->
@@ -467,17 +458,27 @@ $.widget "ui.nestedSortableTree", $.ui.sortable,
       else
         @beyondMaxLevels = 1      
 
-      # serialize: (options) ->
-    #   o = $.extend({}, @options, options)
-    #   items = @_getItemsAsjQuery(o and o.connected)
-    #   str = []
-    #   $(items).each ->
-    #     res = ($(o.item or this).attr(o.attribute or "id") or "").match(o.expression or (/(.+)[-=_](.+)/))
-    #     pid = ($(o.item or this).parent(o.listType).parent(o.items).attr(o.attribute or "id") or "").match(o.expression or (/(.+)[-=_](.+)/))
-    #     str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "]") + "=" + ((if pid then ((if o.key and o.expression then pid[1] else pid[2])) else o.rootID))  if res
+  serialize: (options) ->
+    o = $.extend({}, @options, options)
+    items = @_getItemsAsjQuery(o and o.connected)
+    str = []
+    _master_this = this;
+    $(items).each ->
+      res = ($(o.item or this).attr(o.attribute or "id") or "").match(o.expression or (/(.+)[-=_](.+)/))
+      pid = ($(o.item or this).parent(o.listType).parent(o.items).attr(o.attribute or "id") or "").match(o.expression or (/(.+)[-=_](.+)/))
+      # push the parent node
+      str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "][parent]") + "=" + ((if pid then ((if o.key and o.expression then pid[1] else pid[2])) else o.rootID))  if res
+      # push the nv
+      str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "][nv]") + "=" + $(o.item or this).attr("data-nv")
+      # push the dv
+      str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "][dv]") + "=" + $(o.item or this).attr("data-dv")
+      # push the snv
+      str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "][snv]") + "=" + $(o.item or this).attr("data-snv")
+      # push the sdv
+      str.push ((o.key or res[1]) + "[" + ((if o.key and o.expression then res[1] else res[2])) + "][sdv]") + "=" + $(o.item or this).attr("data-sdv")
 
-    #   str.push o.key + "="  if not str.length and o.key
-    #   str.join "&"
+    str.push o.key + "="  if not str.length and o.key
+    str.join "&"
 
   toArray: (options) ->
     o = $.extend({}, @options, options)
