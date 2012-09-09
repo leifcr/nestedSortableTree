@@ -424,37 +424,34 @@ $.widget "ui.nestedSortableTree", $.ui.sortable,
 
   _getChildLevels: (parent, depth) ->
     self = this
-    o = @options
     result = 0
     depth = depth or 0
-    $(parent).children(o.listType).children(o.items).each (index, child) ->
+    $(parent).children(@options.listType).children(@options.items).each (index, child) ->
       result = Math.max(self._getChildLevels(child, depth + 1), result)
 
     (if depth then result + 1 else result)
 
   _isAllowed: (parentItem, level, levels) ->
-    o = @options
-
-    # NOTE: level isn't used. can probably be removed
+    # NOTE: level isn't used. can be removed later
 
     # protectRoot and custom isAllowed is removed. dont' need it yet
-    # if not o.isAllowed(@placeholder, parentItem) or 
-    #   parentItem and parentItem.hasClass(o.disableNesting) or 
-    #   o.protectRoot and (not parentItem? and not isRoot or isRoot and level > 1)
+    # if not @options.isAllowed(@placeholder, parentItem) or 
+    #   parentItem and parentItem.hasClass(@options.disableNesting) or 
+    #   @options.protectRoot and (not parentItem? and not isRoot or isRoot and level > 1)
 
     #Are we trying to nest under a no-nest 
     # or are we nesting too deep?
-    if not parentItem? or not (parentItem.hasClass(o.disableNesting))
-      if o.maxLevels < levels and o.maxLevels isnt 0
-        @placeholder.addClass o.errorClass
-        @beyondMaxLevels = levels - o.maxLevels
+    if not parentItem? or not (parentItem.hasClass(@options.disableNesting))
+      if @options.maxLevels < levels and @opt.maxLevels isnt 0
+        @placeholder.addClass @options.errorClass
+        @beyondMaxLevels = levels - @options.maxLevels
       else
-        @placeholder.removeClass o.errorClass
+        @placeholder.removeClass @options.errorClass
         @beyondMaxLevels = 0
     else
-      @placeholder.addClass o.errorClass
-      if o.maxLevels < levels and o.maxLevels isnt 0
-        @beyondMaxLevels = levels - o.maxLevels
+      @placeholder.addClass @options.errorClass
+      if @options.maxLevels < levels and @options.maxLevels isnt 0
+        @beyondMaxLevels = levels - @options.maxLevels
       else
         @beyondMaxLevels = 1      
 
